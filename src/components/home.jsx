@@ -10,21 +10,21 @@ const Home = () => {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/post"
+          "https://jsonplaceholder.typicode.com/posts"
         );
-        console.log(response.data);
-        const firstTenPosts = response.data
+        // console.log(response.data);
+        const randomPosts = response.data
           .sort(() => Math.random() - 0.5) // Shuffle the array
           .slice(0, 10);
-        setPosts(firstTenPosts);
-        setFilteredPosts(firstTenPosts);
+        setPosts(response.data);
+        setFilteredPosts(randomPosts);
         setIsLoading(false);
       } catch (err) {
         setError("Failed to fetch posts. Please try again later.");
@@ -40,7 +40,7 @@ const Home = () => {
   }, []);
 
   const handleSearch = (term) => {
-    setSearchTerm(term);
+    setSearchValue(term);
 
     if (!term.trim()) {
       setFilteredPosts(posts);
@@ -82,7 +82,7 @@ const Home = () => {
         ) : (
           <PostList
             posts={filteredPosts}
-            searchTerm={searchTerm}
+            searchValue={searchValue}
             noResultsMessage="No posts found matching your search criteria."
           />
         )}
